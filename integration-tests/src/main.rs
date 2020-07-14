@@ -1,8 +1,6 @@
 // SPDX-License-Identifier: Apache-2.0
 
-//! Integration tests
-
 #![deny(missing_docs)]
-#![deny(clippy::all)]
+#![allow(missing_docs)]
 
 fn main() {}
