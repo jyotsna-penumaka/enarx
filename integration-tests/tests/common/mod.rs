@@ -91,7 +91,8 @@ impl IntegrationTest {
         if stdout != "" {
             let output_length = output.stdout.len();
             println!("length is : {:?}",output_length);
-            assert_eq!(String::from_utf8_lossy(&output.stdout[1..(output_length-3)]), stdout);
+            //assert_eq!(String::from_utf8_lossy(&output.stdout[1..(output_length-3)]), stdout);
+            assert_eq!(String::from_utf8_lossy(&output.stdout), stdout);
         }
         assert_eq!(exit_status, ecode.unwrap());
     }

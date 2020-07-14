@@ -11,13 +11,13 @@ use common::IntegrationTest;
 /// This test runs the write syscall payload in the SGX keep using the SGX shim.
 #[test]
 #[cfg_attr(not(any(has_sgx, has_sev)), ignore)]
-fn read() {
-    IntegrationTest::new("read").run(15, 0, "\"hello world\\n\"");
+fn write() {
+    IntegrationTest::new("write").run(15, 0, "hello world\n");
 }
 
 #[test]
 #[should_panic]
 #[cfg_attr(not(any(has_sgx, has_sev)), ignore)]
-fn read_with_wrong_output() {
-    IntegrationTest::new("read").run(15, 0, "hello");
+fn write_with_wrong_output() {
+    IntegrationTest::new("write").run(15, 0, "hello");
 }
