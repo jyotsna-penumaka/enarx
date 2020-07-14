@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 use std::path::{Path, PathBuf};
-use std::process::Command;
+use std::process::{Command, Stdio};
 use std::time::Duration;
 use wait_timeout::ChildExt;
 
@@ -67,7 +67,7 @@ impl IntegrationTest {
         }
     }
 
-    pub fn run(self, timeout: u64, exit_status: i32) {
+    pub fn run(self, timeout: u64, exit_status: i32, stdout: impl AsRef<[u8]>, stderr: impl AsRef<[u8]>) {
         let seconds = Duration::from_secs(timeout);
 
         let mut cmd = Command::new(self.keep)
@@ -76,6 +76,8 @@ impl IntegrationTest {
             .arg(self.code)
             .arg("--shim")
             .arg(self.shim)
+            .stdin(Stdio::inherit())
+            .stdout(Stdio::piped())
             .spawn()
             .expect("failed to run the test");
 
@@ -86,7 +88,10 @@ impl IntegrationTest {
                 panic!("killed by watchdog!");
             }
         };
-
+        let output = cmd.wait_with_output().expect("Failed to read stdout");
+        
+        assert_eq!(stdout.as_ref().to_vec(), output.stdout);
+        assert_eq!(stderr.as_ref().to_vec(), output.stderr);
         assert_eq!(exit_status, ecode.unwrap());
     }
 }
