@@ -13,12 +13,12 @@ fn main() {
       }
       */
     let mut buf = [0u8; 16];
-    for i in (0..).map(|x| 1 + x) {
+    for i in (0..).map(|x| 1 << x) {
         let len = core::cmp::min(i, buf.len());
         unsafe {
-            if read(libc::STDIN_FILENO, buf.as_mut_ptr() as *mut _, len) <= len as isize{
-                write(libc::STDOUT_FILENO, buf.as_ptr() as *const _, len);
-            } else {
+            let sz = read(libc::STDIN_FILENO, buf.as_mut_ptr() as *mut _, len);
+            write(libc::STDOUT_FILENO, buf.as_ptr() as *const _, len);
+            if sz < len as isize{    
                 exit(1);
             }
         }
