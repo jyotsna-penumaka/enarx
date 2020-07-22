@@ -1,25 +1,16 @@
 // SPDX-License-Identifier: Apache-2.0
 
-use libc::{exit, read, write};
+use libc::{read, write};
 
 fn main() {
-    /*let mut buf = [0u8; 12];
-      unsafe {
-      if read(libc::STDIN_FILENO, buf.as_mut_ptr() as *mut _, 1) == 1 {
-      write(libc::STDOUT_FILENO, buf.as_ptr() as *const _, 1);
-      } else {
-      exit(1);
-      }
-      }
-      */
     let mut buf = [0u8; 16];
     for i in (0..).map(|x| 1 << x) {
         let len = core::cmp::min(i, buf.len());
         unsafe {
             let sz = read(libc::STDIN_FILENO, buf.as_mut_ptr() as *mut _, len);
-            write(libc::STDOUT_FILENO, buf.as_ptr() as *const _, len);
+            write(libc::STDOUT_FILENO, buf.as_ptr() as *const _, sz as usize);
             if sz < len as isize{    
-                exit(1);
+                break;
             }
         }
     }
