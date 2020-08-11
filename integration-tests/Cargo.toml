@@ -6,7 +6,17 @@ edition = "2018"
 license = "Apache-2.0"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[features]
+get_report = []
 
 [dependencies]
 wait-timeout = "0.2.0"
 libc = "0.2"
+
+[dependencies.sgx]
+path = "../sgx"
+features = ["get_report"]
+
+[patch.crates-io]
+openssl = { git = 'https://github.com/npmccallum/rust-openssl', branch='patch' }
+

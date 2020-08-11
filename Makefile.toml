@@ -113,8 +113,9 @@ run_task = { name = "_test", fork = true }
 # targets might not be built and would therefore spuriously fail. You don't
 # want to run this task manually.
 [tasks._test]
+toolchain = "nightly"
 command = "cargo"
-args = ["test"]
+args = ["test", "--features=get_report"]
 
 # !WARNING!
 #
