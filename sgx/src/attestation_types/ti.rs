@@ -22,26 +22,29 @@ pub struct TargetInfo {
     reserved2: [u64; 25],
 }
 
+#[repr(C, align(128))]
+/// Pass information fromm the source enclave to the target enclave
+pub struct ReportData(pub [u8; 64]);
+
 #[cfg(feature = "get_report")]
 impl TargetInfo {
-    /// This function takes a 64-byte REPORTDATA structure as an argument
-    /// calls EREPORT
-    /// returns a cryptographic REPORT structure
-    pub fn get_report(&self, data: &[u16; 32]) -> report::Report {
-        #[repr(C, align(128))]
-        struct Data<T>(T);
-        let data = Data(data);
-        let report: report::Report = Default::default();
+    /// Generate a report to the specified target with the included data.
+    pub fn get_report(&self, data: &ReportData) -> report::Report {
+        let report = core::mem::MaybeUninit::<report::Report>::uninit();
+        const EREPORT: usize = 0;
+        
+
         unsafe {
             asm!(
-            "enclu",
-            in("rax") 00,
-            in("rdx") &report,
-            in("rbx") self,
-            in("rcx") &data,
-            );
+                "enclu",
+                in("rax") EREPORT,
+                in("rdx") &report,
+                in("rbx") self,
+                in("rcx") data,
+                );
+
+            report.assume_init()
         }
-        report
     }
 }
 
