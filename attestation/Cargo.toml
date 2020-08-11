@@ -1,0 +1,18 @@
+[package]
+name = "attestation"
+version = "0.1.0"
+authors = ["Jyotsna <jyotsnap@bu.edu>"]
+license = "Apache-2.0"
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[features]
+get_report = []
+
+[dependencies.sgx]
+path = "../sgx"
+features = ["get_report"]
+
+[patch.crates-io]
+openssl = { git = 'https://github.com/npmccallum/rust-openssl', branch='patch' }

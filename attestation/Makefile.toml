@@ -1,0 +1,15 @@
+[tasks.build]
+toolchain = "nightly"
+command = "cargo"
+args = ["build", "--target=x86_64-unknown-linux-musl", "--features=get_report"]
+
+[tasks.run]
+toolchain = "nightly"
+command = "cargo"
+args = ["run", "--target=x86_64-unknown-linux-musl", "--bin", "--features=get_report", "run"]
+
+[tasks.test]
+toolchain = "nightly"
+command = "cargo"
+args = ["test", "--features=get_report"]
+
