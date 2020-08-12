@@ -115,7 +115,7 @@ run_task = { name = "_test", fork = true }
 [tasks._test]
 toolchain = "nightly"
 command = "cargo"
-args = ["test", "--features=get_report"]
+args = ["test"]
 
 # !WARNING!
 #

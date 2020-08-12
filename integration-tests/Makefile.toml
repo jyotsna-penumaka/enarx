@@ -18,4 +18,10 @@ args = ["build", "--target=x86_64-unknown-linux-musl", "--features=get_report"]
 dependencies = ["clean"]
 
 [tasks.test]
-disabled = true
+toolchain = "nightly"
+command = "cargo"
+args = ["test", "--target=x86_64-unknown-linux-musl", "--features=get_report"]
+dependencies = ["clean"]
+
+#[tasks.test]
+#disabled = true
