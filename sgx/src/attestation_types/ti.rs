@@ -4,10 +4,11 @@
 //! The Target Info is used to identify the target enclave that will be able to cryptographically
 //! verify the REPORT structure returned by the EREPORT leaf. Must be 512-byte aligned.
 
+use crate::attestation_types::report;
 use crate::types::{attr::Attributes, misc::MiscSelect};
 
 /// Table 38-22
-#[derive(Debug)]
+#[derive(Default, Debug)]
 #[repr(C, align(512))]
 pub struct TargetInfo {
     /// MRENCLAVE of the target enclave.
@@ -19,6 +20,31 @@ pub struct TargetInfo {
     pub misc: MiscSelect,
     reserved1: [u64; 32],
     reserved2: [u64; 25],
+}
+
+#[repr(C, align(128))]
+/// Pass information from the source enclave to the target enclave
+pub struct ReportData(pub [u8; 64]);
+
+#[cfg(feature = "get_report")]
+impl TargetInfo {
+    /// Generate a report to the specified target with the included data.
+    pub fn get_report(&self, data: &ReportData) -> report::Report {
+        let mut report = core::mem::MaybeUninit::<report::Report>::uninit();
+        const EREPORT: usize = 0;
+
+        unsafe {
+            asm!(
+            "enclu",
+            in("rax") EREPORT,
+            in("rbx") self,
+            in("rcx") data.0.as_ptr(),
+            in("rdx") report.as_mut_ptr(),
+            );
+
+            report.assume_init()
+        }
+    }
 }
 
 #[cfg(test)]
