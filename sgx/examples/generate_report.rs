@@ -3,7 +3,7 @@
 #[rustversion::nightly]
 use sgx::attestation_types::ti;
 
-#[rustversion::nightly]
+#[cfg(feature = "asm")]
 fn main() {
     let target_info: ti::TargetInfo = Default::default();
     let data = ti::ReportData([0u8; 64]);
