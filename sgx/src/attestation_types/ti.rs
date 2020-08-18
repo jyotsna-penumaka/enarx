@@ -26,7 +26,7 @@ pub struct TargetInfo {
 /// Pass information from the source enclave to the target enclave
 pub struct ReportData(pub [u8; 64]);
 
-#[cfg(feature = "get_report")]
+#[rustversion::nightly]
 impl TargetInfo {
     /// Generate a report to the specified target with the included data.
     pub fn get_report(&self, data: &ReportData) -> report::Report {

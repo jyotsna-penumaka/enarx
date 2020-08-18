@@ -2,7 +2,7 @@
 
 use sgx::attestation_types::ti;
 
-#[cfg(feature = "get_report")]
+#[rustversion::nightly]
 fn main() {
     let target_info: ti::TargetInfo = Default::default();
     let data = ti::ReportData([0u8; 64]);
