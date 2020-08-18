@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: Apache-2.0
 
+#[rustversion::nightly]
 use sgx::attestation_types::ti;
 
 #[rustversion::nightly]

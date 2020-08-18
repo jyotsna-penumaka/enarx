@@ -27,12 +27,13 @@ pub struct TargetInfo {
 pub struct ReportData(pub [u8; 64]);
 
 #[rustversion::nightly]
+#[rustversion::attr(nightly, feature(asm))]
 impl TargetInfo {
     /// Generate a report to the specified target with the included data.
     pub fn get_report(&self, data: &ReportData) -> report::Report {
         let mut report = core::mem::MaybeUninit::<report::Report>::uninit();
         const EREPORT: usize = 0;
-
+        
         unsafe {
             asm!(
             "enclu",
